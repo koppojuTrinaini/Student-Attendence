@@ -10,7 +10,7 @@
 1. Create `backend/.env` from `backend/.env.example`.
 2. Fill in `TWILIO_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_PHONE`.
 3. For local testing without Twilio, set `SMS_MOCK=true` in `backend/.env`.
-4. Install backend dependencies:
+4. Install backend dependencies::
    ```bash
    cd backend
    npm install
