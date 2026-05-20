@@ -1,5 +1,6 @@
 # Student Responsive Attendance Management System
 
+
 ## What was fixed
 - Added real SMS delivery support in `backend/server.js` using Twilio.
 - Added `backend/.env.example` for required secret configuration.
