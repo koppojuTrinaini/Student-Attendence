@@ -1,6 +1,9 @@
 # Student Responsive Attendance Management System
 
 
+## Deployment Guide
+- See `DEPLOYMENT.md` for beginner-friendly GitHub + Render deployment steps.
+
 ## What was fixed
 - Added real SMS delivery support in `backend/server.js` using Twilio.
 - Added `backend/.env.example` for required secret configuration.

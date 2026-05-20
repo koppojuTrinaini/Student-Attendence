@@ -5,18 +5,11 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 
 const app = express();
 
-// Ensure the SQLite database path is always resolved relative to backend directory.
-if (process.env.DATABASE_URL) {
-  if (process.env.DATABASE_URL.startsWith('file:./')) {
-    const relativePath = process.env.DATABASE_URL.replace('file:./', '');
-    const absolutePath = path.resolve(__dirname, relativePath).replace(/\\/g, '/');
-    process.env.DATABASE_URL = `file:${absolutePath}`;
-  }
-} else {
+if (!process.env.DATABASE_URL) {
   const defaultDbPath = path.resolve(__dirname, 'dev.db').replace(/\\/g, '/');
   process.env.DATABASE_URL = `file:${defaultDbPath}`;
 }
