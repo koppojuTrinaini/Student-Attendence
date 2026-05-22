@@ -1,31 +1,80 @@
 # Student Responsive Attendance Management System
 
-## Deployment Guide
-- See `DEPLOYMENT.md` for beginner-friendly GitHub + Render deployment steps.
+## Quick start
 
-## What was fixed
-- Added real SMS delivery support in `server.js` using Twilio.
-- Added `.env.example` for required secret configuration.
-- Updated `package.json` to include `twilio` and backend dependencies.
+1. Install dependencies:
+```bash
+npm install
+```
+2. Start the backend:
+```bash
+npm start
+```
+3. Start the frontend in a second terminal:
+```bash
+npm run dev
+```
+4. Open the app in your browser:
+- `http://localhost:5173/Student-Attendence/`
+
+## Deploy to GitHub + Render (24/7 live app)
+
+This project is set up to deploy the frontend to GitHub Pages and the backend to Render.
+
+### 1) Push code to GitHub
+
+```bash
+git add .
+git commit -m "deploy app"
+git push origin main
+```
+
+### 2) Deploy the backend to Render
+
+1. Go to https://render.com and connect your GitHub account.
+2. Create a new **Web Service**.
+3. Select your repository.
+4. Choose **Docker** as the environment.
+5. Add the environment variables:
+   - `JWT_SECRET` = any secret phrase
+   - `PORT` = `5000`
+6. Deploy the service and copy the Render URL when it finishes.
+
+### 3) Set GitHub Pages frontend backend URL
+
+1. In your GitHub repo, go to **Settings > Secrets and variables > Actions**.
+2. Add a new secret:
+   - Name: `VITE_API_URL`
+   - Value: `https://YOUR_RENDER_URL/api`
+3. Push another commit or rerun the workflow.
+
+### 4) GitHub Pages URL
+
+When the workflow finishes, your frontend will be published at:
+- `https://{YOUR_GITHUB_USERNAME}.github.io/Student-Attendence/`
+
+> If your repo name is different, update `vite.config.js` base to match.
+
+## Notes for beginners
+
+- GitHub Pages hosts the frontend only.
+- Render hosts the backend API and keeps it running 24/7.
+- `VITE_API_URL` tells the frontend where the backend is.
+- Do not commit `.env` or secret values to GitHub.
+
+## Local commands
+
+- Install packages: `npm install`
+- Start backend: `npm start`
+- Start frontend: `npm run dev`
+- Build frontend: `npm run build`
+- Preview build: `npm run preview`
 
 ## SMS Messaging
-SMS messaging to parents has been disabled in this repository. The API still exposes an endpoint to list absent parents' numbers, but no messages will be sent.
-
-## GitHub upload and public hosting
-- Initialize a Git repository in `Student-1` and push to GitHub.
-- Use a hosted service for 24/7 availability:
-  - Frontend: GitHub Pages or any static host.
-  - Backend: Render, Railway, Fly.io, or any Docker-capable host.
-- For a full-stack deploy, either deploy frontend and backend separately or use a service that supports Node APIs behind one domain.
+SMS messaging is disabled in this version. The app can still show absent parents' numbers without sending texts.
 
 ## Security and privacy recommendations
 - Keep `.env` out of Git.
-- Use HTTPS in production for all traffic.
-- Store passwords hashed with `bcrypt` (already implemented).
-- Protect API routes with JWT and role checks (already implemented in `server.js`).
-- Add input validation for all requests before saving data.
-- Create a privacy policy page explaining:
-  - what data is collected,
-  - how it is used,
-  - how long it is stored,
-  - how parents and students can request deletion.
+- Use HTTPS in production.
+- Keep `JWT_SECRET` secret.
+- Validate input before saving data.
