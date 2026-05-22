@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import AuthPage from './pages/AuthPage';
-import AdminDashboard from './pages/AdminDashboard';
-import TeacherDashboard from './pages/TeacherDashboard';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ThemeProvider } from './context/ThemeContext';
+import Navbar from './Navbar';
+import Home from './Home';
+import AuthPage from './AuthPage';
+import AdminDashboard from './AdminDashboard';
+import TeacherDashboard from './TeacherDashboard';
+import ProtectedRoute from './ProtectedRoute';
+import { ThemeProvider } from './ThemeContext';
 
 function App() {
   return (

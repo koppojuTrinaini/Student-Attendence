@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from './ThemeContext';
 
 const links = [
   { label: 'Home', to: '/' },

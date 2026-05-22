@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Users, School2, ClipboardList, BarChart3 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, Tooltip, CartesianGrid } from 'recharts';
 import { motion } from 'framer-motion';
-import api from '../utils/api';
-import DashboardCard from '../components/DashboardCard';
+import api from './api';
+import DashboardCard from './DashboardCard';
 
 const AdminDashboard = () => {
   const [summary, setSummary] = useState({ totalStudents: 0, totalTeachers: 0, totalClasses: 0, attendancePercentage: 0 });

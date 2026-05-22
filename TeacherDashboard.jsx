@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Bell, CheckCircle2, ClipboardList, Users, CalendarDays, Plus, Send, AlertCircle } from 'lucide-react';
+import { Bell, CheckCircle2, ClipboardList, Users, CalendarDays, Plus, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import api from '../utils/api';
-import { clearRole, clearToken, getRole } from '../utils/auth';
+import api from './api';
+import { clearRole, clearToken, getRole } from './auth';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -18,7 +18,6 @@ const TeacherDashboard = () => {
   const [newStudent, setNewStudent] = useState({ name: '', email: '', rollNo: '', parentMobileNumber: '' });
   const [addingStudent, setAddingStudent] = useState(false);
   const [report, setReport] = useState(null);
-  const [sendingSms, setSendingSms] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -116,26 +115,6 @@ const TeacherDashboard = () => {
     }
   };
 
-  const handleSendSms = async () => {
-    if (!report || report.absent.length === 0) {
-      toast.error('No absent students to notify');
-      return;
-    }
-    setSendingSms(true);
-    try {
-      const absentIds = report.absent.map(s => s.id);
-      const response = await api.post('/teacher/send-sms', {
-        classId: selectedClass.id,
-        date: report.date,
-        absentStudentIds: absentIds
-      });
-      toast.success(`SMS sent to ${response.data.smsLog.length} parents`);
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to send SMS');
-    } finally {
-      setSendingSms(false);
-    }
-  };
 
   const logout = () => {
     clearToken();
@@ -387,14 +366,21 @@ const TeacherDashboard = () => {
                       ))}
                     </div>
 
-                    {/* Send SMS Button */}
-                    <button
-                      onClick={handleSendSms}
-                      disabled={sendingSms}
-                      className="w-full rounded-3xl bg-rose-600 px-6 py-4 text-white font-semibold shadow-xl shadow-rose-500/20 hover:bg-rose-700 transition disabled:opacity-70 flex items-center justify-center gap-2 mt-4">
-                      <Send size={20} />
-                      {sendingSms ? 'Sending SMS...' : `Send SMS to ${report.absent.length} Parents`}
-                    </button>
+                        {/* List of absent parents' mobile numbers */}
+                        <div className="space-y-2 mt-4">
+                          <h4 className="text-sm text-slate-400">Absent Parents' Numbers</h4>
+                          <div className="rounded-3xl border border-rose-500/10 bg-slate-950/80 p-4">
+                            {report.absent.filter(s => s.parentMobileNumber).length === 0 ? (
+                              <p className="text-sm text-slate-400">No parent numbers available for absent students.</p>
+                            ) : (
+                              <ul className="list-disc list-inside space-y-1 text-sm text-white">
+                                {report.absent.filter(s => s.parentMobileNumber).map((s) => (
+                                  <li key={s.id}>{s.parentMobileNumber}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
                   </div>
                 )}
 

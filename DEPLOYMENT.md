@@ -10,9 +10,9 @@ This guide deploys your attendance system with **GitHub Pages** for the frontend
 ## Step 1: Confirm the repo has deployment files
 
 Make sure your repository includes:
-- `.github/workflows/deploy-frontend.yml`
-- `frontend/vite.config.js`
-- `backend/Dockerfile`
+- `deploy-frontend.yml`
+- `vite.config.js`
+- `Dockerfile`
 - `render.yaml`
 
 If these files are present, you are ready to deploy.
@@ -30,7 +30,6 @@ If these files are present, you are ready to deploy.
 5. Add these environment variables:
    ```text
    JWT_SECRET=your-secret-key-here
-   SMS_MOCK=true
    PORT=5000
    ```
    - Do not set `DATABASE_URL`. The backend uses `file:./dev.db` automatically.
@@ -49,16 +48,16 @@ If these files are present, you are ready to deploy.
 ## Step 4: Wait for frontend deployment
 
 GitHub Actions will:
-- install `frontend` dependencies
+- install dependencies
 - build the app
-- publish `frontend/dist` to GitHub Pages
+- publish `dist` to GitHub Pages
 
 Your frontend URL will be:
 ```
 https://{YOUR_GITHUB_USERNAME}.github.io/Student-Attendence/
 ```
 
-> If your repo name is different, update `frontend/vite.config.js` base path accordingly.
+> If your repo name is different, update `vite.config.js` base path accordingly.
 
 ## Step 5: Test the online app
 
@@ -72,22 +71,13 @@ https://{YOUR_GITHUB_USERNAME}.github.io/Student-Attendence/
 To run locally:
 
 ```bash
-cd backend
-npm install
-cd ../frontend
 npm install
 ```
 
-Start each app:
+Start the app:
 
 ```bash
-cd backend
 npm start
-```
-
-```bash
-cd ../frontend
-npm run dev
 ```
 
 Then open `http://localhost:5173`.
@@ -96,18 +86,18 @@ Then open `http://localhost:5173`.
 
 Your repository should look like this:
 
-- `frontend/`
-  - `src/`
-  - `vite.config.js`
-  - `package.json`
-- `backend/`
-  - `server.js`
-  - `package.json`
-  - `prisma/schema.prisma`
-  - `Dockerfile`
-- `.github/workflows/deploy-frontend.yml`
+- `index.html`
+- `App.jsx`
+- `main.jsx`
+- `vite.config.js`
+- `Dockerfile`
+- `server.js`
+- `schema.prisma`
 - `render.yaml`
-- `DEPLOYMENT.md`
+- `deploy-frontend.yml`
+- `package.json`
+- `.gitignore`
+- `.env.example`
 
 ## Notes for beginners
 - GitHub Pages works only for static frontend files.
@@ -118,13 +108,13 @@ Your repository should look like this:
 ## Troubleshooting
 
 ### Backend deployment fails on Render
-- Confirm `backend/package.json` includes `@prisma/client`, `prisma`, and `twilio`.
-- Confirm `backend/Dockerfile` is present.
+- Confirm `package.json` includes `@prisma/client` and `prisma`.
+- Confirm `Dockerfile` is present.
 - Check the Render build logs for errors.
 
 ### Frontend blank or 404 on GitHub Pages
 - Ensure the Pages secret `VITE_API_URL` is set.
-- Ensure `frontend/vite.config.js` has the correct `base` path.
+- Ensure `vite.config.js` has the correct `base` path.
 - Wait a few minutes for GitHub Pages to publish.
 
 ### API requests fail

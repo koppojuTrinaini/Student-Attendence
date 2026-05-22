@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { getToken, getRole } from '../utils/auth';
+import { getToken, getRole } from './auth';
 
 const ProtectedRoute = ({ children, role }) => {
   const token = getToken();

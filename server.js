@@ -4,7 +4,6 @@ const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const twilio = require('twilio');
 require('dotenv').config();
 
 const app = express();
@@ -18,11 +17,7 @@ const prisma = new PrismaClient();
 console.log('Using SQLite DB at', process.env.DATABASE_URL);
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const TWILIO_SID = process.env.TWILIO_SID;
-const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
-const TWILIO_PHONE = process.env.TWILIO_PHONE;
-const SMS_MOCK = process.env.SMS_MOCK === 'true';
-const twilioClient = !SMS_MOCK && TWILIO_SID && TWILIO_AUTH_TOKEN && TWILIO_SID.startsWith('AC') ? twilio(TWILIO_SID, TWILIO_AUTH_TOKEN) : null;
+// SMS messaging disabled for GitHub-only deployment
 
 app.use(cors());
 app.use(express.json());
@@ -478,48 +473,15 @@ app.post('/api/teacher/send-sms', authenticateToken, async (req, res) => {
       where: { id: { in: absentStudentIds } }
     });
 
-    if (!twilioClient || !TWILIO_PHONE) {
-      if (!SMS_MOCK) {
-        return res.status(500).json({
-          error: 'SMS service is not configured. Add TWILIO_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE to backend/.env.'
-        });
-      }
-    }
-
+    // Build a list of absent parents' numbers without sending SMS
     const smsLog = [];
     for (const student of absentStudents) {
       if (student.parentMobileNumber) {
-        const messageText = `Dear Parent, Your child ${student.name} (Roll: ${student.rollNo}) was absent today. Please contact the school for more information.`;
-        const smsEntry = {
-          studentName: student.name,
-          parentMobile: student.parentMobileNumber,
-          message: messageText,
-          status: 'pending'
-        };
-
-        if (SMS_MOCK) {
-          smsEntry.status = 'mocked';
-          smsEntry.mock = true;
-          console.log(`Mock SMS to ${student.parentMobileNumber}: ${messageText}`);
-        } else {
-          try {
-            await twilioClient.messages.create({
-              to: student.parentMobileNumber,
-              from: TWILIO_PHONE,
-              body: messageText
-            });
-            smsEntry.status = 'sent';
-          } catch (smsErr) {
-            smsEntry.status = 'failed';
-            smsEntry.error = smsErr.message;
-          }
-        }
-
-        smsLog.push(smsEntry);
+        smsLog.push({ studentName: student.name, parentMobile: student.parentMobileNumber });
       }
     }
 
-    res.json({ message: 'SMS notification processed', smsLog });
+    res.json({ message: 'Absent parents list (SMS disabled)', smsLog });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -527,6 +489,5 @@ app.post('/api/teacher/send-sms', authenticateToken, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Twilio configured: ${!!twilioClient && !!TWILIO_PHONE}`);
-  console.log(`SMS mock mode: ${SMS_MOCK}`);
+  console.log('SMS messaging: disabled');
 });

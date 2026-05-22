@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, Users, CheckCircle2, Sparkles, Phone } from 'lucide-react';
-import SectionCard from '../components/SectionCard';
-import FloatingTabs from '../components/FloatingTabs';
+import SectionCard from './SectionCard';
 
 const Home = () => (
   <div className="relative overflow-hidden">
@@ -53,9 +52,6 @@ const Home = () => (
             </div>
           </div>
         </motion.div>
-      </div>
-      <div className="absolute right-6 top-12">
-        <FloatingTabs />
       </div>
     </section>
 

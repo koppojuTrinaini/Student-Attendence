@@ -4,10 +4,8 @@ import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
-  migrations: {
-    path: "prisma/migrations",
-  },
+  schema: "./schema.prisma",
+  // migrations folder not used in flattened repo; omit to avoid path errors
   datasource: {
     url: process.env["DATABASE_URL"],
   },

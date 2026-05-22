@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { UserPlus, Lock, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import api from '../utils/api';
-import { setToken, setRole } from '../utils/auth';
+import api from './api';
+import { setToken, setRole } from './auth';
 
 const AuthPage = () => {
   const { type } = useParams();
